@@ -83,9 +83,35 @@ function addDepartment() {
                 },
                 function (err) {
                     if (err) throw err;
-                    console.log("_____________________")
+                    console.log("`````````````")
                     console.log(answer.department + " has been added!");
-                    console.log("_____________________")
+                    console.log("`````````````")
+                    choiceRequest();
+                }
+            );
+        });
+};
+function addRole() {
+
+    var query = "INSERT INTO role (name) VALUES (?)";
+    inquirer
+        .prompt([
+            {
+                name: "role",
+                type: "input",
+                message: "What role did you want to add?"
+            }
+        ]).then(function (answer) {
+            connection.query(
+                query,
+                {
+                    name: answer.role
+                },
+                function (err) {
+                    if (err) throw err;
+                    console.log("`````````````")
+                    console.log(answer.role + " has been added!");
+                    console.log("`````````````")
                     choiceRequest();
                 }
             );
