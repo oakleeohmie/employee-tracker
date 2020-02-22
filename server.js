@@ -117,5 +117,31 @@ function addRole() {
             );
         });
 };
+function addEmployee() {
+
+    var query = "INSERT INTO employee (name) VALUES (?)";
+    inquirer
+        .prompt([
+            {
+                name: "employee",
+                type: "input",
+                message: "What role did you want to add?"
+            }
+        ]).then(function (answer) {
+            connection.query(
+                query,
+                {
+                    name: answer.employee
+                },
+                function (err) {
+                    if (err) throw err;
+                    console.log("`````````````")
+                    console.log(answer.employee + " has been added!");
+                    console.log("`````````````")
+                    choiceRequest();
+                }
+            );
+        });
+};
 
 choiceRequest();
