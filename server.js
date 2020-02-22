@@ -62,6 +62,34 @@ function choiceRequest() {
                 case "Exit":
                     connection.end();
                     break;
+            };
+        });
+};
+function addDepartment() {
+
+    var query = "INSERT INTO department (name) VALUES (?)";
+    inquirer
+        .prompt([
+            {
+                name: "department",
+                type: "input",
+                message: "What department did you want to add?"
             }
-        })
-}
+        ]).then(function (answer) {
+            connection.query(
+                query,
+                {
+                    name: answer.department
+                },
+                function (err) {
+                    if (err) throw err;
+                    console.log("_____________________")
+                    console.log(answer.department + " has been added!");
+                    console.log("_____________________")
+                    choiceRequest();
+                }
+            );
+        });
+};
+
+choiceRequest();
