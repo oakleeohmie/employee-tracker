@@ -11,3 +11,57 @@ var connection = mysql.createConnection({
 connection.connect(function (err) {
     if (err) throw err;
 });
+
+function choiceRequest() {
+    inquirer
+        .prompt({
+            name: "action",
+            type: "list",
+            message: "What would you like to do?",
+            choices: [
+                "Add department",
+                "Add role",
+                "Add employee",
+                "View departments",
+                "View roles",
+                "View employees",
+                "Update employee",
+                "Exit"
+            ]
+        })
+        .then(function (choice) {
+            switch (choice.action) {
+                case "Add department":
+                    addDepartment();
+                    break;
+
+                case "Add role":
+                    addRole();
+                    break;
+
+                case "Add employee":
+                    addEmployee();
+                    break;
+
+                case "View departments":
+                    viewDepartments();
+                    break;
+
+                case "View roles":
+                    viewRoles();
+                    break;
+
+                case "View employees":
+                    viewEmployees();
+                    break;
+
+                case "Update employee":
+                    updateEmployee();
+                    break;
+
+                case "Exit":
+                    connection.end();
+                    break;
+            }
+        })
+}
