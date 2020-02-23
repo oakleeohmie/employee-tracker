@@ -44,15 +44,15 @@ function choiceRequest() {
                     break;
 
                 case "View departments":
-                    viewDepartments();
+                    allDepartments();
                     break;
 
                 case "View roles":
-                    viewRoles();
+                    allRoles();
                     break;
 
                 case "View employees":
-                    viewEmployees();
+                    allEmployees();
                     break;
 
                 case "Update employee":
@@ -67,7 +67,7 @@ function choiceRequest() {
 };
 function addDepartment() {
 
-    var query = "INSERT INTO department (name) VALUES (?)";
+    var query = "INSERT INTO department SET ?";
     inquirer
         .prompt([
             {
@@ -75,17 +75,17 @@ function addDepartment() {
                 type: "input",
                 message: "What department did you want to add?"
             }
-        ]).then(function (answer) {
+        ]).then(function (res) {
             connection.query(
                 query,
                 {
-                    name: answer.department
+                    name: res.department
                 },
                 function (err) {
                     if (err) throw err;
-                    console.log("`````````````")
-                    console.log(answer.department + " has been added!");
-                    console.log("`````````````")
+                    console.log(".............................")
+                    console.log(res.department + " has been added!");
+                    console.log(".............................")
                     choiceRequest();
                 }
             );
@@ -93,25 +93,37 @@ function addDepartment() {
 };
 function addRole() {
 
-    var query = "INSERT INTO role (name) VALUES (?)";
+    var query = "INSERT INTO role SET ?";
     inquirer
         .prompt([
             {
                 name: "role",
                 type: "input",
                 message: "What role did you want to add?"
+            },
+            {
+                name: "salary",
+                type: "input",
+                message: "What is the salary for this role?"
+            },
+            {
+                name: "department_id",
+                type: "input",
+                message: "Give the department a number ID"
             }
-        ]).then(function (answer) {
+        ]).then(function (res) {
             connection.query(
                 query,
                 {
-                    name: answer.role
+                    title: res.role,
+                    salary: res.salary,
+                    department_id: res.department_id
                 },
                 function (err) {
                     if (err) throw err;
-                    console.log("`````````````")
-                    console.log(answer.role + " has been added!");
-                    console.log("`````````````")
+                    console.log(".............................")
+                    console.log(res.role + " has been added!");
+                    console.log(".............................")
                     choiceRequest();
                 }
             );
@@ -119,29 +131,77 @@ function addRole() {
 };
 function addEmployee() {
 
-    var query = "INSERT INTO employee (name) VALUES (?)";
+    var query = "INSERT INTO employee SET ?";
     inquirer
         .prompt([
             {
-                name: "employee",
+                name: "first_name",
                 type: "input",
-                message: "What role did you want to add?"
+                message: "What is the employee's first name?"
+            },
+            {
+                name: "last_name",
+                type: "input",
+                message: "What is the employee's last name?"
+            },
+            {
+                name: "role_id",
+                type: "input",
+                message: "What's the employee's role ID?"
+            },
+            {
+                name: "manager_id",
+                type: "input",
+                message: "Please enter manager ID if avaiable"
             }
-        ]).then(function (answer) {
+        ]).then(function (res) {
             connection.query(
                 query,
                 {
-                    name: answer.employee
+                    first_name: res.first_name,
+                    last_name: res.last_name,
+                    role_id: res.role_id,
+                    manager_id: res.manager_id
+
                 },
                 function (err) {
                     if (err) throw err;
-                    console.log("`````````````")
-                    console.log(answer.employee + " has been added!");
-                    console.log("`````````````")
+                    console.log(".............................")
+                    console.log(res.employee + " has been added!");
+                    console.log(".............................")
                     choiceRequest();
                 }
             );
         });
 };
+function allDepartments() {
+
+    var query = "SELECT * FROM department";
+    connection.query(query, function (err, res) {
+        if (err) throw err;
+        console.table(res)
+        choiceRequest();
+    });
+};
+function allRoles() {
+
+    var query = "SELECT * FROM role";
+    connection.query(query, function (err, res) {
+        if (err) throw err;
+        console.table(res)
+        choiceRequest();
+    });
+};
+function allEmployees() {
+
+    var query = "SELECT * FROM employee";
+    connection.query(query, function (err, res) {
+        if (err) throw err;
+        console.table(res)
+        choiceRequest();
+    });
+};
+
+
 
 choiceRequest();
