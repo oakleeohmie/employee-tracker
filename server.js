@@ -28,8 +28,7 @@ function choiceRequest() {
                 "Update employee",
                 "Exit"
             ]
-        })
-        .then(function (choice) {
+        }).then(function (choice) {
             switch (choice.action) {
                 case "Add department":
                     addDepartment();
@@ -202,6 +201,43 @@ function allEmployees() {
     });
 };
 
-
-
+function updateEmployee() {
+    var query = "UPDATE employee SET first_name = ?, last_name = ? WHERE first_name = ?"
+    inquirer
+        .prompt([
+            {
+                name: "first_name",
+                type: "input",
+                message: "What is the first name of the employee that needs to be updated?"
+            },
+            {
+                name: "new_fname",
+                type: "input",
+                message: "What's the updated first name?"
+            },
+            {
+                name: "new_fname",
+                type: "input",
+                message: "What's the updated last name?"
+            }
+        ]).then(function (res) {
+            connection.query(
+                query,
+                {
+                    first_name: res.new_fname
+                },
+                {
+                    last_name: res.new_lname
+                },
+                {
+                    first_name: res.first_name
+                },
+                function (err) {
+                    if (err) throw err;
+                    console.log(".............................")
+                    console.log(res.first_name + " has been updated to " + res.new_fname + " " + res.new_lname);
+                    console.log(".............................")
+                });
+        });
+};
 choiceRequest();
