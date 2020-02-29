@@ -83,7 +83,7 @@ function addDepartment() {
                 function (err) {
                     if (err) throw err;
                     console.log(".............................")
-                    console.log(res.department + " has been added!");
+                    console.log(res.department + " HAS BEEN ADDED!");
                     console.log(".............................")
                     choiceRequest();
                 }
@@ -121,7 +121,7 @@ function addRole() {
                 function (err) {
                     if (err) throw err;
                     console.log(".............................")
-                    console.log(res.role + " has been added!");
+                    console.log(res.role + " HAS BEEN ADDED!");
                     console.log(".............................")
                     choiceRequest();
                 }
@@ -166,7 +166,7 @@ function addEmployee() {
                 function (err) {
                     if (err) throw err;
                     console.log(".............................")
-                    console.log(res.employee + " has been added!");
+                    console.log(res.employee + " HAS BEEN ADDED!");
                     console.log(".............................")
                     choiceRequest();
                 }
@@ -202,42 +202,42 @@ function allEmployees() {
 };
 
 function updateEmployee() {
-    var query = "UPDATE employee SET first_name = ?, last_name = ? WHERE first_name = ?"
-    inquirer
-        .prompt([
-            {
-                name: "first_name",
-                type: "input",
-                message: "What is the first name of the employee that needs to be updated?"
-            },
-            {
-                name: "new_fname",
-                type: "input",
-                message: "What's the updated first name?"
-            },
-            {
-                name: "new_fname",
-                type: "input",
-                message: "What's the updated last name?"
-            }
-        ]).then(function (res) {
-            connection.query(
-                query,
+    var query = "SELECT * FROM employee"
+    connection.query(query, function (err, res) {
+        if (err) throw err;
+        console.table(res);
+        inquirer
+            .prompt([
                 {
-                    first_name: res.new_fname
+                    name: "id",
+                    type: "input",
+                    message: "What is employee's ID?"
                 },
                 {
-                    last_name: res.new_lname
+                    name: "new_fname",
+                    type: "input",
+                    message: "What's the updated first name?"
                 },
                 {
-                    first_name: res.first_name
-                },
-                function (err) {
-                    if (err) throw err;
-                    console.log(".............................")
-                    console.log(res.first_name + " has been updated to " + res.new_fname + " " + res.new_lname);
-                    console.log(".............................")
-                });
-        });
+                    name: "new_lname",
+                    type: "input",
+                    message: "What's the updated last name?"
+                }
+            ]).then(function (res) {
+                var newQuery = "UPDATE employee SET first_name = '" + res.new_fname + " ', last_name = '" + res.new_lname + "'  WHERE id = " + res.id
+                connection.query(
+                    newQuery,
+                    function (err, res) {
+                        if (err) throw err;
+                        console.log(".................................................")
+                        console.log("EMPLOYEE HAS BEEN UPDATED SUCCESSFULLY!");
+                        console.log(".................................................")
+                        choiceRequest();
+                    }
+                )
+
+
+            });
+    });
 };
 choiceRequest();
